@@ -5,10 +5,11 @@ utilize the campfire chat service using an IRC client.
 
 ## How To
 
-IRCDCampf has only been tested with ruby 1.9.2. Clone the repo, then
-run:
+IRCDCampf has only been tested with ruby 1.9.2. Clone the repo, edit DOMAIN and TOKEN on:
 
-bin/ircd_campf
+  bin/ircd_campf
+
+And run the file.
 
 Type /list to see the list of available channels.
 
