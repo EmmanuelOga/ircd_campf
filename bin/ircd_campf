@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), "../lib"))
+
+require 'ircd_campf'
+
+server = IRCDSlim::Server.new do |server|
+  server.prefix = `hostname`.chomp
+  server.date = Time.now
+  server.motd = "IRCDSlim v#{IRCDSlim::VERSION} powered Campfire Bridge (v#{IRCDCampf::VERSION})\nJoin #campfire to create a bridge."
+  server.port = ENV["ircd_port"] || 12000
+end
+
+trap("INT") do
+  puts "Stopping server"
+  server.stop do
+    EventMachine.stop
+  end
+end
+
+EM.kqueue; EM.epoll
+EventMachine.run do
+  server.start
+  $stderr.puts(server.motd)
+  $stderr.puts("listening on #{server.ip}:#{server.port}")
+
+  IRCDCampf::Bridge.new(server, "https://DOMAIN.campfirenow.com", "TOKEN").start
+end
